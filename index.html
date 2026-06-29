@@ -242,9 +242,14 @@
   @media(max-width:360px){#cmdk-hint{display:none}}
   #cmdk[hidden]{display:none}
   #cmdk{position:fixed;inset:0;z-index:200;display:flex;align-items:flex-start;justify-content:center}
-  .cmdk-backdrop{position:absolute;inset:0;background:rgba(8,10,16,.42);backdrop-filter:blur(3px)}
-  .cmdk-panel{position:relative;margin-top:12vh;width:min(560px,92vw);max-height:74vh;display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 34px 90px -34px rgba(0,0,0,.85);overflow:hidden;animation:cmdkIn .16s ease}
-  @keyframes cmdkIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
+  .cmdk-backdrop{position:absolute;inset:0;background:rgba(8,10,16,.42);backdrop-filter:blur(3px);animation:cmdkBackIn .2s ease}
+  .cmdk-panel{position:relative;margin-top:12vh;width:min(560px,92vw);max-height:74vh;display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 34px 90px -34px rgba(0,0,0,.85);overflow:hidden;animation:cmdkIn .2s cubic-bezier(.2,.85,.25,1)}
+  @keyframes cmdkIn{from{opacity:0;transform:translateY(-14px) scale(.97)}to{opacity:1;transform:none}}
+  @keyframes cmdkBackIn{from{opacity:0}to{opacity:1}}
+  #cmdk.cmdk-closing .cmdk-backdrop{animation:cmdkBackOut .16s ease forwards}
+  #cmdk.cmdk-closing .cmdk-panel{animation:cmdkOut .16s ease forwards}
+  @keyframes cmdkOut{to{opacity:0;transform:translateY(-10px) scale(.97)}}
+  @keyframes cmdkBackOut{to{opacity:0}}
   #cmdk-input{flex:none;width:100%;box-sizing:border-box;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--ink);font-family:var(--mono);font-size:15px;padding:16px 18px;outline:none}
   #cmdk-input::placeholder{color:var(--faint)}
   #cmdk-list{flex:1;list-style:none;margin:0;padding:6px;overflow-y:auto}
@@ -254,16 +259,64 @@
   .cmdk-opt[aria-selected="true"]{background:var(--accent-wash);border-left-color:var(--accent)}
   .cmdk-count{flex:none;font-family:var(--mono);font-size:11px;color:var(--faint);padding:8px 14px;border-top:1px solid var(--line)}
 
+  /* ---- entrance gate: wire a connection to enter ---- */
+  #enter{position:fixed;inset:0;z-index:400;overflow:hidden;perspective:1700px;background:var(--bg);font-family:var(--sans)}
+  html.entered #enter{display:none}
+  #enter .door{position:absolute;top:0;bottom:0;width:50.5%;background:linear-gradient(180deg,var(--panel),var(--bg));backface-visibility:hidden;will-change:transform,opacity;transition:transform .85s cubic-bezier(.7,0,.18,1),opacity .85s ease}
+  #enter .door.l{left:0;transform-origin:left center;box-shadow:inset -1px 0 0 var(--line)}
+  #enter .door.r{right:0;transform-origin:right center;box-shadow:inset 1px 0 0 var(--line)}
+  #enter.open .door.l{transform:rotateY(-115deg);opacity:0}
+  #enter.open .door.r{transform:rotateY(115deg);opacity:0}
+  #enter .enter-stage{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;gap:8px;transition:opacity .4s ease}
+  #enter.open .enter-stage{opacity:0;pointer-events:none}
+  .enter-eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0}
+  .enter-title{font-size:clamp(28px,6vw,52px);font-weight:700;line-height:1.04;letter-spacing:-.025em;margin:4px 0 6px;color:var(--ink)}
+  #enter-svg{width:min(560px,90vw);height:auto;touch-action:none}
+  #enter-guide{stroke:var(--line);stroke-width:2;stroke-dasharray:3 9;stroke-linecap:round}
+  #enter-tgt circle:first-child{fill:none;stroke:var(--faint);stroke-width:2;stroke-dasharray:5 7}
+  #enter-tgt circle:last-child{fill:var(--faint)}
+  #enter.lit #enter-tgt circle{stroke:var(--accent);fill:var(--accent)}
+  #enter-wire{stroke:var(--accent);stroke-width:4;stroke-linecap:round;opacity:0;transition:opacity .15s}
+  #enter.wiring #enter-wire,#enter.lit #enter-wire{opacity:1}
+  #enter-src{cursor:grab;animation:srcPulse 2s ease-in-out infinite}
+  #enter-src:active{cursor:grabbing}
+  #enter-src circle:first-child{fill:var(--accent-wash);stroke:var(--accent);stroke-width:2.5}
+  #enter-src .port{fill:var(--accent)}
+  @keyframes srcPulse{0%,100%{filter:drop-shadow(0 0 0 transparent)}50%{filter:drop-shadow(0 0 9px var(--accent))}}
+  .enter-hint{font-family:var(--mono);font-size:13px;color:var(--muted);margin:10px 0 0}
+  #enter-btn{font:inherit;color:var(--accent);background:transparent;border:0;border-bottom:1px solid var(--accent);cursor:pointer;padding:0 2px}
+
   @media (prefers-reduced-motion: reduce){
     html{scroll-behavior:auto}
     *{transition:none!important;animation:none!important}
+    #enter .door{transition:transform .85s cubic-bezier(.7,0,.18,1),opacity .85s ease!important}
+    #enter .enter-stage{transition:opacity .4s ease!important}
   }
 </style>
 </head>
 <body>
-<script>(function(){try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches && "IntersectionObserver" in window){document.documentElement.classList.add("js-anim");}}catch(e){}})();</script>
+<script>(function(){var r=document.documentElement;try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches && "IntersectionObserver" in window){r.classList.add("js-anim");}}catch(e){}try{if(sessionStorage.getItem("pf-entered"))r.classList.add("entered");}catch(e){}})();</script>
 
 <a class="skip" href="#main">Skip to content</a>
+
+<div id="enter">
+  <div class="door l"></div>
+  <div class="door r"></div>
+  <div class="enter-stage">
+    <p class="enter-eyebrow">Muhammed Fawaz · Full-Stack (Angular)</p>
+    <h2 class="enter-title">Wire it up<br>to step inside.</h2>
+    <svg id="enter-svg" viewBox="0 0 600 300" role="img" aria-label="Drag a connection from the node to the socket to enter the portfolio">
+      <line id="enter-guide" x1="150" y1="150" x2="450" y2="150"></line>
+      <g id="enter-tgt"><circle cx="450" cy="150" r="30"></circle><circle cx="450" cy="150" r="6"></circle></g>
+      <line id="enter-wire" x1="150" y1="150" x2="150" y2="150"></line>
+      <g id="enter-src" tabindex="0" role="button" aria-label="Drag to connect, or press Enter to step inside">
+        <circle cx="150" cy="150" r="36"></circle>
+        <circle cx="150" cy="150" r="7" class="port"></circle>
+      </g>
+    </svg>
+    <p class="enter-hint">Drag a connection into the socket — or <button id="enter-btn" type="button">press Enter ↵</button></p>
+  </div>
+</div>
 
 <div class="pf">
 <header class="bar">
@@ -1099,9 +1152,10 @@
     c.run();
   }
 
-  var prevFocus=null, tourTimers=[];
+  var prevFocus=null, tourTimers=[], closeTimer=null;
   function cancelTour(){ for(var i=0;i<tourTimers.length;i++) clearTimeout(tourTimers[i]); tourTimers=[]; }
   function open(){
+    if(closeTimer){ clearTimeout(closeTimer); closeTimer=null; cmdk.classList.remove("cmdk-closing"); }
     if(!cmdk.hidden) return;
     prevFocus=document.activeElement;
     cmdk.hidden=false; input.value=""; render(); input.focus();
@@ -1110,10 +1164,18 @@
       if(first){ try{ sessionStorage.setItem("pf-cmdk-toured","1"); }catch(_){} tourTimers.push(setTimeout(startTour, 540)); }
     }
   }
+  function hideNow(){
+    if(closeTimer){ clearTimeout(closeTimer); closeTimer=null; }
+    cmdk.classList.remove("cmdk-closing");
+    cmdk.hidden=true; input.setAttribute("aria-activedescendant","");
+    var p=prevFocus; prevFocus=null; if(p && p.focus) p.focus();
+  }
   function close(){
-    if(cmdk.hidden) return;
-    cancelTour(); cmdk.hidden=true; input.setAttribute("aria-activedescendant","");
-    if(prevFocus && prevFocus.focus) prevFocus.focus();
+    if(cmdk.hidden || closeTimer) return;
+    cancelTour();
+    if(reduce){ hideNow(); return; }
+    cmdk.classList.add("cmdk-closing");
+    closeTimer=setTimeout(hideNow, 165);
   }
 
   function typeInto(text, after){
@@ -1134,6 +1196,7 @@
   }
 
   document.addEventListener("keydown", function(e){
+    if(!document.documentElement.classList.contains("entered")) return;
     var k=e.key;
     if((e.metaKey||e.ctrlKey) && (k==="k"||k==="K")){ e.preventDefault(); if(cmdk.hidden) open(); else close(); return; }
     var tag=((e.target&&e.target.tagName)||"").toLowerCase();
@@ -1151,6 +1214,69 @@
   list.addEventListener("click", function(e){ var li=e.target.closest(".cmdk-opt"); if(!li) return; sel=+li.dataset.i; highlight(); runSel(); });
   cmdk.addEventListener("mousedown", function(e){ if(e.target.hasAttribute("data-cmdk-close")) close(); });
   if(hint){ hint.addEventListener("click", open); requestAnimationFrame(function(){ hint.classList.add("pulse"); }); }
+})();
+</script>
+
+<script>
+/* ---------- entrance gate: drag a connection to step inside ---------- */
+(function(){
+  var root = document.documentElement;
+  var enter = document.getElementById("enter");
+  if(!enter) return;
+  if(root.classList.contains("entered")){ if(enter.parentNode) enter.parentNode.removeChild(enter); return; }
+
+  var svg = document.getElementById("enter-svg");
+  var src = document.getElementById("enter-src");
+  var wire = document.getElementById("enter-wire");
+  var btn = document.getElementById("enter-btn");
+  var TX=450, TY=150, SX=150, SY=150, R=46, done=false, dragging=false;
+
+  var prevOverflow = document.body.style.overflow;
+  document.body.style.overflow = "hidden";
+
+  function toLocal(e){
+    try{ var p=svg.createSVGPoint(); p.x=e.clientX; p.y=e.clientY; return p.matrixTransform(svg.getScreenCTM().inverse()); }
+    catch(_){ return {x:SX,y:SY}; }
+  }
+  function drawTo(x,y){ wire.setAttribute("x2",x); wire.setAttribute("y2",y); }
+  function near(x,y){ var dx=x-TX, dy=y-TY; return dx*dx+dy*dy <= R*R; }
+
+  function connect(){
+    if(done) return; done=true; dragging=false;
+    enter.classList.remove("wiring"); enter.classList.add("lit"); drawTo(TX,TY);
+    try{ sessionStorage.setItem("pf-entered","1"); }catch(_){}
+    enter.classList.add("open");
+    setTimeout(finish, 900);
+  }
+  function finish(){
+    document.body.style.overflow = prevOverflow;
+    root.classList.add("entered");
+    if(enter.parentNode) enter.parentNode.removeChild(enter);
+    var m=document.getElementById("main"); if(m){ m.setAttribute("tabindex","-1"); try{ m.focus({preventScroll:true}); }catch(_){} }
+  }
+
+  src.addEventListener("pointerdown", function(e){
+    if(done) return; dragging=true; enter.classList.add("wiring");
+    try{ src.setPointerCapture(e.pointerId); }catch(_){}
+    e.preventDefault();
+  });
+  svg.addEventListener("pointermove", function(e){
+    if(!dragging || done) return;
+    var p=toLocal(e); drawTo(p.x, p.y);
+    if(near(p.x, p.y)) connect();
+  });
+  function endDrag(){ if(done) return; dragging=false; enter.classList.remove("wiring"); drawTo(SX,SY); }
+  svg.addEventListener("pointerup", endDrag);
+  svg.addEventListener("pointercancel", endDrag);
+
+  if(btn) btn.addEventListener("click", function(e){ e.preventDefault(); connect(); });
+  src.addEventListener("keydown", function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); connect(); } });
+  document.addEventListener("keydown", function(e){
+    if(done || root.classList.contains("entered")) return;
+    if(e.key==="Enter" || e.key==="Escape"){ e.preventDefault(); connect(); }
+  }, true);
+
+  try{ src.focus({preventScroll:true}); }catch(_){}
 })();
 </script>
 
