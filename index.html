@@ -273,7 +273,7 @@
       linear-gradient(180deg, var(--panel), var(--bg) 72%)}
   #enter .curtain.l{left:0;transform-origin:left center;box-shadow:inset -26px 0 50px -24px rgba(0,0,0,.7)}
   #enter .curtain.r{right:0;transform-origin:right center;box-shadow:inset 26px 0 50px -24px rgba(0,0,0,.7)}
-  #enter.open{pointer-events:none}
+  #enter.open{pointer-events:none;background:transparent}
   #enter.open .curtain{transform:scaleX(0)}
   #enter.open .curtain.l{animation:curtainOpenL 1.15s cubic-bezier(.66,0,.2,1) forwards}
   #enter.open .curtain.r{animation:curtainOpenR 1.15s cubic-bezier(.66,0,.2,1) forwards}
@@ -284,7 +284,7 @@
   @keyframes curtainCloseL{0%{transform:scaleX(0) skewY(0deg)}45%{transform:scaleX(.55) skewY(-1.2deg)}100%{transform:scaleX(1) skewY(0deg)}}
   @keyframes curtainCloseR{0%{transform:scaleX(0) skewY(0deg)}45%{transform:scaleX(.55) skewY(1.2deg)}100%{transform:scaleX(1) skewY(0deg)}}
   html.seen #enter .curtain{transform:scaleX(0)}
-  html.seen #enter{pointer-events:none}
+  html.seen #enter{pointer-events:none;background:transparent}
   #enter .enter-stage{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;gap:6px;transition:opacity .5s ease}
   #enter.open .enter-stage,html.seen #enter .enter-stage{opacity:0;pointer-events:none}
   .enter-eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0}
