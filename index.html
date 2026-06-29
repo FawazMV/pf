@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Muhammed Fawaz — Full-Stack Developer (Front-End, Angular) at Neutrinos. Portfolio.">
 <meta name="color-scheme" content="dark light">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Cdefs%3E%3CclipPath%20id%3D%22fc%22%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%2232%22%2F%3E%3C%2FclipPath%3E%3ClinearGradient%20id%3D%22fsk%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23e0a878%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23bd7c41%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Cg%20clip-path%3D%22url%28%23fc%29%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20fill%3D%22%237c83ff%22%2F%3E%3Cellipse%20cx%3D%2232%22%20cy%3D%2233%22%20rx%3D%2217%22%20ry%3D%2219%22%20fill%3D%22url%28%23fsk%29%22%2F%3E%3Cpath%20d%3D%22M15%2028%20Q13%2052%2032%2058%20Q51%2052%2049%2028%20Q50%2044%2040%2050%20Q40%2036%2032%2037%20Q24%2036%2024%2050%20Q14%2044%2015%2028%20Z%22%20fill%3D%22%231d161e%22%2F%3E%3Cpath%20d%3D%22M21%2028%20Q26%2024%2031%2028%22%20stroke%3D%22%23160f06%22%20stroke-width%3D%223%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%2F%3E%3Cpath%20d%3D%22M33%2028%20Q38%2024%2043%2028%22%20stroke%3D%22%23160f06%22%20stroke-width%3D%223%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22%2F%3E%3Cg%20fill%3D%22%231d161e%22%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2211%22%20r%3D%2213%22%2F%3E%3Ccircle%20cx%3D%2218%22%20cy%3D%2216%22%20r%3D%2211%22%2F%3E%3Ccircle%20cx%3D%2246%22%20cy%3D%2216%22%20r%3D%2211%22%2F%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2227%22%20r%3D%228%22%2F%3E%3Ccircle%20cx%3D%2252%22%20cy%3D%2227%22%20r%3D%228%22%2F%3E%3Ccircle%20cx%3D%2224%22%20cy%3D%229%22%20r%3D%229%22%2F%3E%3Ccircle%20cx%3D%2240%22%20cy%3D%229%22%20r%3D%229%22%2F%3E%3C%2Fg%3E%3Cpath%20d%3D%22M15%2030%20Q17%2012%2032%2011%20Q47%2012%2049%2030%20Q42%2021%2032%2021%20Q22%2021%2015%2030%20Z%22%20fill%3D%22%231d161e%22%2F%3E%3C%2Fg%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%2230.5%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-opacity%3D%22.22%22%20stroke-width%3D%223%22%2F%3E%3C%2Fsvg%3E">
 <title>Muhammed Fawaz — Full-Stack Developer</title>
 <style>
   :root{
@@ -99,6 +100,11 @@
   .facts dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:10px 16px;font-size:14px}
   .facts dt{color:var(--faint);font-family:var(--mono);font-size:12px}
   .facts dd{margin:0;color:var(--ink)}
+  [data-avatar]{display:block;line-height:0}
+  [data-avatar] svg{width:100%;height:auto;display:block}
+  [data-avatar] .ring{stroke:var(--accent)}
+  .facts .avatar{width:128px;margin:2px auto 18px}
+  .enter-avatar{width:106px;margin:0 auto 8px}
   .chip{font-family:var(--mono);font-size:11px;color:var(--ink);background:var(--panel2);border:1px solid var(--line);padding:3px 8px;border-radius:7px;white-space:nowrap}
 
   /* ---- Styling / live tokens ---- */
@@ -308,6 +314,7 @@
   <div class="curtain l"></div>
   <div class="curtain r"></div>
   <div class="enter-stage">
+    <div class="enter-avatar" data-avatar aria-hidden="true"></div>
     <p class="enter-eyebrow">Full-Stack Developer · Front-End (Angular)</p>
     <p class="enter-name">Muhammed Fawaz</p>
     <p class="enter-hint">the curtain rises in a moment — <b>or click to enter</b></p>
@@ -391,6 +398,7 @@
         <p>On the backend I build scalable microservices in NestJS and Express on PostgreSQL — Dockerised and shipped through CI/CD — including a custom content service that replaced Strapi for Reels. I picked up the MER(A)N stack through an intensive bootcamp and freelance work, after a BSc in Physics.</p>
       </div>
       <aside class="facts" aria-label="Quick facts">
+        <div class="avatar" data-avatar aria-hidden="true"></div>
         <dl>
           <dt>role</dt><dd>SDE-2 · Full-Stack (Angular)</dd>
           <dt>company</dt><dd>Neutrinos Pvt Ltd</dd>
@@ -1264,6 +1272,38 @@
     try{ window.scrollTo({top:0, behavior:"smooth"}); }catch(_){ window.scrollTo(0,0); }
     setTimeout(closeGate, 380);
   });
+})();
+</script>
+
+<script>
+/* ---------- illustrated avatar (inline SVG, themes its ring) ---------- */
+(function(){
+  var A='<svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustrated portrait of Muhammed Fawaz">'
+  +'<defs><clipPath id="rcA"><circle cx="120" cy="120" r="120"/></clipPath>'
+  +'<linearGradient id="bgA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#222a40"/><stop offset="1" stop-color="#0e1018"/></linearGradient>'
+  +'<linearGradient id="skA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d89f72"/><stop offset="1" stop-color="#b3743c"/></linearGradient></defs>'
+  +'<g clip-path="url(#rcA)"><rect width="240" height="240" fill="url(#bgA)"/>'
+  +'<path d="M34 240 V206 Q34 162 92 152 L120 146 L148 152 Q206 162 206 206 V240 Z" fill="#14161e"/>'
+  +'<path d="M101 150 L120 186 L139 150 L120 144 Z" fill="#0d0f15"/>'
+  +'<rect x="103" y="126" width="34" height="36" rx="15" fill="#a76b37"/>'
+  +'<ellipse cx="120" cy="102" rx="47" ry="53" fill="url(#skA)"/>'
+  +'<circle cx="73" cy="108" r="9" fill="#b3743c"/><circle cx="167" cy="108" r="9" fill="#b3743c"/>'
+  +'<path d="M74 90 Q70 150 120 164 Q170 150 166 90 Q170 126 150 140 Q150 116 120 118 Q90 116 90 140 Q70 126 74 90 Z" fill="#241c24"/>'
+  +'<path d="M99 119 Q120 128 141 119 Q120 132 99 119 Z" fill="#241c24"/>'
+  +'<path d="M108 127 Q120 133 132 127" stroke="#6f4427" stroke-width="2.5" fill="none" stroke-linecap="round"/>'
+  +'<path d="M120 93 L115 113 Q120 118 125 112" stroke="#94602f" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>'
+  +'<path d="M91 95 Q100 89 109 95" stroke="#241608" stroke-width="3.5" fill="none" stroke-linecap="round"/>'
+  +'<path d="M131 95 Q140 89 149 95" stroke="#241608" stroke-width="3.5" fill="none" stroke-linecap="round"/>'
+  +'<circle cx="100" cy="95" r="2.3" fill="#160f06"/><circle cx="140" cy="95" r="2.3" fill="#160f06"/>'
+  +'<path d="M89 83 Q100 77 111 83" stroke="#1b130d" stroke-width="4.5" fill="none" stroke-linecap="round"/>'
+  +'<path d="M129 83 Q140 77 151 83" stroke="#1b130d" stroke-width="4.5" fill="none" stroke-linecap="round"/>'
+  +'<g fill="#1f1926"><circle cx="120" cy="38" r="27"/><circle cx="90" cy="46" r="23"/><circle cx="150" cy="46" r="23"/>'
+  +'<circle cx="68" cy="66" r="19"/><circle cx="172" cy="66" r="19"/><circle cx="104" cy="30" r="20"/>'
+  +'<circle cx="136" cy="30" r="20"/><circle cx="80" cy="52" r="17"/><circle cx="160" cy="52" r="17"/>'
+  +'<circle cx="62" cy="84" r="14"/><circle cx="178" cy="84" r="14"/></g>'
+  +'<path d="M73 92 Q76 54 120 52 Q164 54 167 92 Q150 74 120 74 Q90 74 73 92 Z" fill="#1f1926"/>'
+  +'</g><circle class="ring" cx="120" cy="120" r="118" fill="none" stroke-opacity=".55" stroke-width="3"/></svg>';
+  document.querySelectorAll("[data-avatar]").forEach(function(el){ el.innerHTML=A; });
 })();
 </script>
 
