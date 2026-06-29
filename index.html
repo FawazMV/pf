@@ -889,5 +889,62 @@
 })();
 </script>
 
+<script>
+/* ---------- eased (momentum) wheel scrolling — desktop + motion-safe ---------- */
+(function(){
+  var mm = window.matchMedia;
+  var reduce = mm && mm("(prefers-reduced-motion: reduce)").matches;
+  var fine   = mm && mm("(pointer: fine)").matches;
+  var force  = /[?&]smooth=force/.test(location.search);
+  // Skip on touch devices (keep native momentum) and when the user prefers reduced motion.
+  if((reduce || !fine) && !force) return;
+
+  var docEl = document.documentElement;
+  docEl.style.scrollBehavior = "auto"; // we provide the easing ourselves; avoid double-smoothing
+  var target = window.scrollY, curr = window.scrollY, running = false;
+  var EASE = 0.14;
+
+  function maxY(){ return Math.max(0, docEl.scrollHeight - window.innerHeight); }
+  function clamp(v){ return v < 0 ? 0 : (v > maxY() ? maxY() : v); }
+  function frame(){
+    var d = target - curr;
+    if(Math.abs(d) < 0.5){ curr = target; window.scrollTo(0, curr); running = false; return; }
+    curr += d * EASE;
+    window.scrollTo(0, curr);
+    requestAnimationFrame(frame);
+  }
+  function kick(){ if(!running){ running = true; requestAnimationFrame(frame); } }
+  function px(e){ return e.deltaMode === 1 ? e.deltaY * 16 : (e.deltaMode === 2 ? e.deltaY * window.innerHeight : e.deltaY); }
+
+  window.addEventListener("wheel", function(e){
+    if(e.ctrlKey) return;                                  // let pinch-zoom through
+    if(Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;    // let horizontal scroll be native
+    e.preventDefault();
+    target = clamp(target + px(e));
+    kick();
+  }, { passive:false });
+
+  // stay in sync when scrolling happens by other means (keyboard, scrollbar, programmatic)
+  window.addEventListener("scroll", function(){ if(!running){ target = curr = window.scrollY; } }, { passive:true });
+  window.addEventListener("resize", function(){ target = clamp(target); }, { passive:true });
+
+  // eased jumps for in-page anchor links (nav)
+  document.addEventListener("click", function(e){
+    var a = e.target.closest && e.target.closest('a[href^="#"]');
+    if(!a) return;
+    var id = a.getAttribute("href");
+    if(id.length < 2) return;
+    var el = document.querySelector(id);
+    if(!el) return;
+    e.preventDefault();
+    target = clamp(el.getBoundingClientRect().top + window.scrollY - 70);
+    kick();
+    if(history.replaceState) history.replaceState(null, "", id);
+  });
+
+  window.__smoothScroll = { set EASE(v){ EASE = v; }, get EASE(){ return EASE; } };
+})();
+</script>
+
 </body>
 </html>
