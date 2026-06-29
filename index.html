@@ -259,62 +259,58 @@
   .cmdk-opt[aria-selected="true"]{background:var(--accent-wash);border-left-color:var(--accent)}
   .cmdk-count{flex:none;font-family:var(--mono);font-size:11px;color:var(--faint);padding:8px 14px;border-top:1px solid var(--line)}
 
-  /* ---- entrance gate: wire a connection to enter ---- */
-  #enter{position:fixed;inset:0;z-index:400;overflow:hidden;perspective:1700px;background:var(--bg);font-family:var(--sans)}
-  html.entered #enter{display:none}
-  #enter .door{position:absolute;top:0;bottom:0;width:50.5%;background:linear-gradient(180deg,var(--panel),var(--bg));backface-visibility:hidden;will-change:transform,opacity;transition:transform .85s cubic-bezier(.7,0,.18,1),opacity .85s ease}
-  #enter .door.l{left:0;transform-origin:left center;box-shadow:inset -1px 0 0 var(--line)}
-  #enter .door.r{right:0;transform-origin:right center;box-shadow:inset 1px 0 0 var(--line)}
-  #enter.open .door.l{transform:rotateY(-115deg);opacity:0}
-  #enter.open .door.r{transform:rotateY(115deg);opacity:0}
-  #enter .enter-stage{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;gap:8px;transition:opacity .4s ease}
-  #enter.open .enter-stage{opacity:0;pointer-events:none}
+  /* ---- entrance: a curtain that parts ---- */
+  #enter{position:fixed;inset:0;z-index:400;overflow:hidden;background:var(--bg);font-family:var(--sans)}
+  #enter .curtain{position:absolute;top:0;bottom:0;width:51%;will-change:transform;
+    background:
+      repeating-linear-gradient(90deg, rgba(0,0,0,.34) 0 5px, rgba(255,255,255,.03) 5px 9px, rgba(0,0,0,.14) 9px 24px, rgba(255,255,255,.05) 24px 28px),
+      linear-gradient(180deg, var(--panel), var(--bg) 72%)}
+  #enter .curtain.l{left:0;transform-origin:left center;box-shadow:inset -26px 0 50px -24px rgba(0,0,0,.7)}
+  #enter .curtain.r{right:0;transform-origin:right center;box-shadow:inset 26px 0 50px -24px rgba(0,0,0,.7)}
+  #enter.open{pointer-events:none}
+  #enter.open .curtain{transform:scaleX(0)}
+  #enter.open .curtain.l{animation:curtainOpenL 1.15s cubic-bezier(.66,0,.2,1) forwards}
+  #enter.open .curtain.r{animation:curtainOpenR 1.15s cubic-bezier(.66,0,.2,1) forwards}
+  #enter.closing .curtain.l{animation:curtainCloseL 1s cubic-bezier(.5,0,.3,1) forwards}
+  #enter.closing .curtain.r{animation:curtainCloseR 1s cubic-bezier(.5,0,.3,1) forwards}
+  @keyframes curtainOpenL{0%{transform:scaleX(1) skewY(0deg)}35%{transform:scaleX(.7) skewY(1.4deg)}70%{transform:scaleX(.3) skewY(-1deg)}100%{transform:scaleX(0) skewY(0deg)}}
+  @keyframes curtainOpenR{0%{transform:scaleX(1) skewY(0deg)}35%{transform:scaleX(.7) skewY(-1.4deg)}70%{transform:scaleX(.3) skewY(1deg)}100%{transform:scaleX(0) skewY(0deg)}}
+  @keyframes curtainCloseL{0%{transform:scaleX(0) skewY(0deg)}45%{transform:scaleX(.55) skewY(-1.2deg)}100%{transform:scaleX(1) skewY(0deg)}}
+  @keyframes curtainCloseR{0%{transform:scaleX(0) skewY(0deg)}45%{transform:scaleX(.55) skewY(1.2deg)}100%{transform:scaleX(1) skewY(0deg)}}
+  html.seen #enter .curtain{transform:scaleX(0)}
+  html.seen #enter{pointer-events:none}
+  #enter .enter-stage{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;gap:6px;transition:opacity .5s ease}
+  #enter.open .enter-stage,html.seen #enter .enter-stage{opacity:0;pointer-events:none}
   .enter-eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0}
-  .enter-title{font-size:clamp(28px,6vw,52px);font-weight:700;line-height:1.04;letter-spacing:-.025em;margin:4px 0 6px;color:var(--ink)}
-  #enter-svg{width:min(560px,90vw);height:auto;touch-action:none}
-  #enter-guide{stroke:var(--line);stroke-width:2;stroke-dasharray:3 9;stroke-linecap:round}
-  #enter-tgt circle:first-child{fill:none;stroke:var(--faint);stroke-width:2;stroke-dasharray:5 7}
-  #enter-tgt circle:last-child{fill:var(--faint)}
-  #enter.lit #enter-tgt circle{stroke:var(--accent);fill:var(--accent)}
-  #enter-wire{stroke:var(--accent);stroke-width:4;stroke-linecap:round;opacity:0;transition:opacity .15s}
-  #enter.wiring #enter-wire,#enter.lit #enter-wire{opacity:1}
-  #enter-src{cursor:grab;animation:srcPulse 2s ease-in-out infinite}
-  #enter-src:active{cursor:grabbing}
-  #enter-src circle:first-child{fill:var(--accent-wash);stroke:var(--accent);stroke-width:2.5}
-  #enter-src .port{fill:var(--accent)}
-  @keyframes srcPulse{0%,100%{filter:drop-shadow(0 0 0 transparent)}50%{filter:drop-shadow(0 0 9px var(--accent))}}
-  .enter-hint{font-family:var(--mono);font-size:13px;color:var(--muted);margin:10px 0 0}
-  #enter-btn{font:inherit;color:var(--accent);background:transparent;border:0;border-bottom:1px solid var(--accent);cursor:pointer;padding:0 2px}
+  .enter-name{font-size:clamp(30px,7vw,62px);font-weight:700;letter-spacing:-.025em;margin:6px 0 2px;color:var(--ink)}
+  .enter-hint{font-family:var(--mono);font-size:13px;color:var(--faint);margin:14px 0 0}
+  .enter-hint b{color:var(--muted);font-weight:400}
+  #curtain-call{margin:26px auto 0;display:inline-block;font-family:var(--mono);font-size:12.5px;color:var(--muted);background:transparent;border:1px solid var(--line);border-radius:9px;padding:9px 16px;cursor:pointer;transition:color .2s,border-color .2s}
+  #curtain-call:hover{color:var(--ink);border-color:var(--accent)}
 
   @media (prefers-reduced-motion: reduce){
     html{scroll-behavior:auto}
     *{transition:none!important;animation:none!important}
-    #enter .door{transition:transform .85s cubic-bezier(.7,0,.18,1),opacity .85s ease!important}
-    #enter .enter-stage{transition:opacity .4s ease!important}
+    #enter.open .curtain.l{animation:curtainOpenL 1.15s cubic-bezier(.66,0,.2,1) forwards!important}
+    #enter.open .curtain.r{animation:curtainOpenR 1.15s cubic-bezier(.66,0,.2,1) forwards!important}
+    #enter.closing .curtain.l{animation:curtainCloseL 1s cubic-bezier(.5,0,.3,1) forwards!important}
+    #enter.closing .curtain.r{animation:curtainCloseR 1s cubic-bezier(.5,0,.3,1) forwards!important}
+    #enter .enter-stage{transition:opacity .5s ease!important}
   }
 </style>
 </head>
 <body>
-<script>(function(){var r=document.documentElement;try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches && "IntersectionObserver" in window){r.classList.add("js-anim");}}catch(e){}try{if(sessionStorage.getItem("pf-entered"))r.classList.add("entered");}catch(e){}})();</script>
+<script>(function(){var r=document.documentElement;try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches && "IntersectionObserver" in window){r.classList.add("js-anim");}}catch(e){}try{if(sessionStorage.getItem("pf-seen")){r.classList.add("seen");r.classList.add("entered");}}catch(e){}})();</script>
 
 <a class="skip" href="#main">Skip to content</a>
 
 <div id="enter">
-  <div class="door l"></div>
-  <div class="door r"></div>
+  <div class="curtain l"></div>
+  <div class="curtain r"></div>
   <div class="enter-stage">
-    <p class="enter-eyebrow">Muhammed Fawaz · Full-Stack (Angular)</p>
-    <h2 class="enter-title">Wire it up<br>to step inside.</h2>
-    <svg id="enter-svg" viewBox="0 0 600 300" role="img" aria-label="Drag a connection from the node to the socket to enter the portfolio">
-      <line id="enter-guide" x1="150" y1="150" x2="450" y2="150"></line>
-      <g id="enter-tgt"><circle cx="450" cy="150" r="30"></circle><circle cx="450" cy="150" r="6"></circle></g>
-      <line id="enter-wire" x1="150" y1="150" x2="150" y2="150"></line>
-      <g id="enter-src" tabindex="0" role="button" aria-label="Drag to connect, or press Enter to step inside">
-        <circle cx="150" cy="150" r="36"></circle>
-        <circle cx="150" cy="150" r="7" class="port"></circle>
-      </g>
-    </svg>
-    <p class="enter-hint">Drag a connection into the socket — or <button id="enter-btn" type="button">press Enter ↵</button></p>
+    <p class="enter-eyebrow">Full-Stack Developer · Front-End (Angular)</p>
+    <p class="enter-name">Muhammed Fawaz</p>
+    <p class="enter-hint">the curtain rises in a moment — <b>or click to enter</b></p>
   </div>
 </div>
 
@@ -559,6 +555,7 @@
     </div>
     <p class="ph">Calicut, Kerala · India — open to remote</p>
     <p class="colophon">Hand-built single page · inline-SVG node-graph · live styling tokens · no frameworks, no external assets.</p>
+    <button id="curtain-call" type="button">Thanks for visiting — draw the curtain ↩</button>
   </div>
 </footer>
 
@@ -1218,65 +1215,55 @@
 </script>
 
 <script>
-/* ---------- entrance gate: drag a connection to step inside ---------- */
+/* ---------- entrance: curtain (auto-opens after 3s; click/Enter to skip) ---------- */
 (function(){
   var root = document.documentElement;
   var enter = document.getElementById("enter");
   if(!enter) return;
-  if(root.classList.contains("entered")){ if(enter.parentNode) enter.parentNode.removeChild(enter); return; }
-
-  var svg = document.getElementById("enter-svg");
-  var src = document.getElementById("enter-src");
-  var wire = document.getElementById("enter-wire");
-  var btn = document.getElementById("enter-btn");
-  var TX=450, TY=150, SX=150, SY=150, R=46, done=false, dragging=false;
-
+  var stage = enter.querySelector(".enter-stage");
+  var open = false, autoT=null, closeT=null;
+  var seen = root.classList.contains("seen");
   var prevOverflow = document.body.style.overflow;
-  document.body.style.overflow = "hidden";
+  function lock(){ document.body.style.overflow = "hidden"; }
+  function unlock(){ document.body.style.overflow = prevOverflow; }
 
-  function toLocal(e){
-    try{ var p=svg.createSVGPoint(); p.x=e.clientX; p.y=e.clientY; return p.matrixTransform(svg.getScreenCTM().inverse()); }
-    catch(_){ return {x:SX,y:SY}; }
-  }
-  function drawTo(x,y){ wire.setAttribute("x2",x); wire.setAttribute("y2",y); }
-  function near(x,y){ var dx=x-TX, dy=y-TY; return dx*dx+dy*dy <= R*R; }
-
-  function connect(){
-    if(done) return; done=true; dragging=false;
-    enter.classList.remove("wiring"); enter.classList.add("lit"); drawTo(TX,TY);
-    try{ sessionStorage.setItem("pf-entered","1"); }catch(_){}
+  function openGate(){
+    if(open) return; open=true;
+    if(autoT){ clearTimeout(autoT); autoT=null; }
+    if(closeT){ clearTimeout(closeT); closeT=null; }
+    try{ sessionStorage.setItem("pf-seen","1"); }catch(_){}
+    root.classList.add("entered"); root.classList.remove("seen");
+    enter.classList.remove("closing");
     enter.classList.add("open");
-    setTimeout(finish, 900);
-  }
-  function finish(){
-    document.body.style.overflow = prevOverflow;
-    root.classList.add("entered");
-    if(enter.parentNode) enter.parentNode.removeChild(enter);
+    unlock();
     var m=document.getElementById("main"); if(m){ m.setAttribute("tabindex","-1"); try{ m.focus({preventScroll:true}); }catch(_){} }
   }
+  function closeGate(){
+    if(!open) return; open=false;
+    if(stage) stage.innerHTML = '<p class="enter-eyebrow">Thanks for stopping by</p><p class="enter-name">— Muhammed Fawaz</p><p class="enter-hint">click the curtain to reopen</p>';
+    root.classList.remove("seen");
+    enter.classList.remove("open");
+    enter.classList.add("closing");
+    lock();
+    if(closeT) clearTimeout(closeT);
+    closeT = setTimeout(function(){ enter.classList.remove("closing"); }, 1050);
+  }
 
-  src.addEventListener("pointerdown", function(e){
-    if(done) return; dragging=true; enter.classList.add("wiring");
-    try{ src.setPointerCapture(e.pointerId); }catch(_){}
-    e.preventDefault();
-  });
-  svg.addEventListener("pointermove", function(e){
-    if(!dragging || done) return;
-    var p=toLocal(e); drawTo(p.x, p.y);
-    if(near(p.x, p.y)) connect();
-  });
-  function endDrag(){ if(done) return; dragging=false; enter.classList.remove("wiring"); drawTo(SX,SY); }
-  svg.addEventListener("pointerup", endDrag);
-  svg.addEventListener("pointercancel", endDrag);
+  if(seen){ open=true; root.classList.add("entered"); }
+  else { lock(); autoT = setTimeout(openGate, 3000); }
 
-  if(btn) btn.addEventListener("click", function(e){ e.preventDefault(); connect(); });
-  src.addEventListener("keydown", function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); connect(); } });
+  enter.addEventListener("click", function(){ if(!open) openGate(); });
   document.addEventListener("keydown", function(e){
-    if(done || root.classList.contains("entered")) return;
-    if(e.key==="Enter" || e.key==="Escape"){ e.preventDefault(); connect(); }
+    if(open) return;
+    if(e.key==="Enter" || e.key===" " || e.key==="Escape"){ e.preventDefault(); openGate(); }
   }, true);
 
-  try{ src.focus({preventScroll:true}); }catch(_){}
+  var cc = document.getElementById("curtain-call");
+  if(cc) cc.addEventListener("click", function(e){
+    e.preventDefault();
+    try{ window.scrollTo({top:0, behavior:"smooth"}); }catch(_){ window.scrollTo(0,0); }
+    setTimeout(closeGate, 380);
+  });
 })();
 </script>
 
